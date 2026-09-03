@@ -146,7 +146,7 @@ Visual Studio.
 SQL Server o SQL Server Express.
 Git.
 Clonar el repositorio
-git clone https://github.com/USUARIO/GaleriaDibujos.git
+
 
 
 Entrar en la carpeta:
