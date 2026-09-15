@@ -8,7 +8,7 @@
 ---
 
 ## 1. Visión del Producto
-Quiero construir una plataforma web limpia y visualmente atractiva donde artistas digitales y aficionados al dibujo puedan compartir su talento, inspirarse con el trabajo de otros y recibir reconocimiento a través de una comunidad interactiva. La plataforma debe ser accesible, fácil de usar y rápida tanto en computadoras de escritorio como en dispositivos móviles.
+Queremos construir una plataforma web limpia y visualmente atractiva donde artistas digitales y aficionados al dibujo puedan compartir su talento, inspirarse con el trabajo de otros y recibir reconocimiento a través de una comunidad interactiva. La plataforma debe ser accesible, fácil de usar y rápida tanto en computadoras de escritorio como en dispositivos móviles.
 
 ---
 
@@ -27,7 +27,7 @@ Quiero construir una plataforma web limpia y visualmente atractiva donde artista
 
 ### Módulo B: Gestión de Dibujos (Publicaciones)
 * **HU-04 (Subir Dibujo):** Como usuario autenticado, quiero subir una imagen (formatos `.png`, `.jpg`, `.webp`) adjuntando un título y una descripción opcional.
-* **HU-05 (Explorar Galería):** Como visitante o usuario, quiero ver un muro principal (*feed*) con todos los dibujos publicados ordenados .
+* **HU-05 (Explorar Galería):** Como visitante o usuario, quiero ver un muro principal (*feed*) con todos los dibujos publicados ordenados.
 * **HU-06 (Modificar Publicación):** Como autor de un dibujo, quiero poder editar el título y la descripción de mi obra si cometí un error.
 * **HU-07 (Eliminar Publicación):** Como autor de un dibujo, quiero borrar mi publicación cuando lo desee, asegurándome de que desaparezca de la plataforma.
 
@@ -52,4 +52,4 @@ Quiero construir una plataforma web limpia y visualmente atractiva donde artista
 
 ---
 
-## 6. Fases de Entrega Sugeridas
+## 6. Fases de Entrega
