@@ -1,3 +1,10 @@
+INTEGRANTES DEL PROYECTO
+
+- Juan Jose Melo Gallego
+- Johan Nikolas Velandia Zambrano
+- Andres Steven Rivera Rivera
+
+
 # Galería de Dibujos 🎨
 
 Una plataforma web donde los usuarios pueden subir, compartir y descubrir dibujos e ilustraciones. Los usuarios podrán crear una cuenta, publicar sus propios dibujos, explorar las publicaciones de otros usuarios y dar "Me gusta" a sus obras favoritas.
