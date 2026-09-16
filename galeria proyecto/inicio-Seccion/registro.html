@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Dibujos - Registrarse</title>
+    <!-- CSS propio en español -->
+    <link rel="stylesheet" href="registro.css">
+</head>
+<body>
+
+    <!-- Header similar al index -->
+    <header class="navbar">
+        <a href="index.html" class="logo-container">
+            <div class="logo-icon">🎨</div>
+            <span>Galería de Dibujos</span>
+        </a>
+        <a href="../index.html" class="nav-link-back">← Volver al inicio</a>
+    </header>
+
+    <!-- Caja de Registro -->
+    <main class="main-container">
+        <div class="auth-card">
+            
+            <h1 class="card-title">Crear Cuenta</h1>
+            <p class="card-subtitle">Regístrate para formar parte de la comunidad</p>
+
+            <div id="alert-box" class="alert-message"></div>
+
+            <form id="form-register">
+                <div class="form-group">
+                    <label for="reg-name">Nombre Completo</label>
+                    <input type="text" id="reg-name" class="form-control" placeholder="Tu nombre o usuario" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-email">Correo Electrónico</label>
+                    <input type="email" id="reg-email" class="form-control" placeholder="ejemplo@correo.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-password">Contraseña</label>
+                    <input type="password" id="reg-password" class="form-control" placeholder="Mínimo 6 caracteres" minlength="6" required>
+                </div>
+
+                <button type="submit" class="btn-submit">Crear Mi Cuenta</button>
+            </form>
+
+            <div class="switch-page">
+                ¿Ya tienes una cuenta? <a href="iniciar-sesion.html" class="switch-link">Inicia sesión aquí</a>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- JS propio en español -->
+    <script src="registro.js"></script>
+</body>
+</html>
