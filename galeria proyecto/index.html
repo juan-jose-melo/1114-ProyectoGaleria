@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Galería de Dibujos</title>
+
+    <link rel="stylesheet" href="estilos.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- =========================
+         BARRA DE NAVEGACIÓN
+    ========================== -->
+
+    <header class="navbar">
+
+        <div class="logo">
+
+            <div class="logo-icon">
+                🎨
+            </div>
+
+            <span>Galería de Dibujos</span>
+
+        </div>
+
+
+        <nav class="menu">
+
+            <a href="galeria.html" class="enlace activo">
+                Explorar
+            </a>
+
+            <a href="login.html" class="enlace">
+                Iniciar Sesión
+            </a>
+
+            <a href="registro.html" class="boton-registro">
+                Registrarse
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-contenido">
+
+                <div class="hero-texto">
+
+                    <span class="etiqueta">
+                        COMUNIDAD DE ARTISTAS
+                    </span>
+
+                    <h1>
+                        Descubre y comparte
+                        <br>
+                        <span>arte digital</span>
+                    </h1>
+
+                    <p>
+                        Explora una comunidad de artistas, encuentra
+                        inspiración y comparte tus propias ilustraciones.
+                    </p>
+
+                    <div class="hero-botones">
+
+                        <a href="galeria.html" class="boton-principal">
+                            Explorar Galería
+                            <span>→</span>
+                        </a>
+
+                        <a href="registro.html" class="boton-secundario">
+                            Crear una cuenta
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <div class="hero-ilustracion">
+
+                    <div class="mancha mancha-1"></div>
+                    <div class="mancha mancha-2"></div>
+
+                    <div class="hero-imagen">
+
+                        <img
+                            src="img/dibujo1.jpg"
+                            alt="Ilustración artística"
+                        >
+
+                    </div>
+
+                    <div class="decoracion circulo"></div>
+                    <div class="decoracion estrella">✦</div>
+                    <div class="decoracion pincel">〰</div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             GALERÍA PRINCIPAL
+        ========================== -->
+
+        <section class="galeria">
+
+            <div class="galeria-cabecera">
+
+                <div>
+
+                    <span class="seccion-etiqueta">
+                        INSPIRACIÓN
+                    </span>
+
+                    <h2>
+                        Últimos dibujos
+                    </h2>
+
+                    <p>
+                        Descubre las obras más recientes de nuestra comunidad.
+                    </p>
+
+                </div>
+
+
+                <a href="galeria.html" class="ver-todos">
+                    Ver todos
+                    <span>→</span>
+                </a>
+
+            </div>
+
+
+            <!-- =========================
+                 GRID DE TARJETAS
+            ========================== -->
+
+            <div class="grid-galeria">
+
+
+                <!-- TARJETA 1 -->
+
+                <article class="tarjeta">
+
+                    <div class="imagen-contenedor">
+
+                        <img
+                            src="img/dibujo1.jpg"
+                            alt="Lago de los sueños"
+                        >
+
+                        <div class="categoria">
+                            PAISAJE
+                        </div>
+
+                    </div>
+
+                    <div class="tarjeta-info">
+
+                        <div class="datos-dibujo">
+
+                            <h3>
+                                Lago de los sueños
+                            </h3>
+
+                            <p>
+                                @valen_arte
+                            </p>
+
+                        </div>
+
+
+                        <div class="acciones">
+
+                            <button class="accion" type="button">
+                                <span>♥</span>
+                                372
+                            </button>
+
+                            <button class="accion compartir" type="button">
+                                ↗
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- TARJETA 2 -->
+
+                <article class="tarjeta">
+
+                    <div class="imagen-contenedor">
+
+                        <img
+                            src="img/dibujo2.jpg"
+                            alt="Mirada violeta"
+                        >
+
+                        <div class="categoria">
+                            RETRATO
+                        </div>
+
+                    </div>
+
+                    <div class="tarjeta-info">
+
+                        <div class="datos-dibujo">
+
+                            <h3>
+                                Mirada violeta
+                            </h3>
+
+                            <p>
+                                @alejandrodra
+                            </p>
+
+                        </div>
+
+
+                        <div class="acciones">
+
+                            <button class="accion" type="button">
+                                <span>♥</span>
+                                286
+                            </button>
+
+                            <button class="accion compartir" type="button">
+                                ↗
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- TARJETA 3 -->
+
+                <article class="tarjeta">
+
+                    <div class="imagen-contenedor">
+
+                        <img
+                            src="img/dibujo3.jpg"
+                            alt="Amigo inesperado"
+                        >
+
+                        <div class="categoria">
+                            ANIMALES
+                        </div>
+
+                    </div>
+
+                    <div class="tarjeta-info">
+
+                        <div class="datos-dibujo">
+
+                            <h3>
+                                Amigo inesperado
+                            </h3>
+
+                            <p>
+                                @sofia_arte
+                            </p>
+
+                        </div>
+
+
+                        <div class="acciones">
+
+                            <button class="accion" type="button">
+                                <span>♥</span>
+                                421
+                            </button>
+
+                            <button class="accion compartir" type="button">
+                                ↗
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- TARJETA 4 -->
+
+                <article class="tarjeta">
+
+                    <div class="imagen-contenedor">
+
+                        <img
+                            src="img/dibujo4.jpg"
+                            alt="Sin rumbo"
+                        >
+
+                        <div class="categoria">
+                            DIGITAL
+                        </div>
+
+                    </div>
+
+                    <div class="tarjeta-info">
+
+                        <div class="datos-dibujo">
+
+                            <h3>
+                                Sin rumbo
+                            </h3>
+
+                            <p>
+                                @andres_art
+                            </p>
+
+                        </div>
+
+
+                        <div class="acciones">
+
+                            <button class="accion" type="button">
+                                <span>♥</span>
+                                198
+                            </button>
+
+                            <button class="accion compartir" type="button">
+                                ↗
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- TARJETA 5 -->
+
+                <article class="tarjeta">
+
+                    <div class="imagen-contenedor">
+
+                        <img
+                            src="img/dibujo5.jpg"
+                            alt="Atardecer en la playa"
+                        >
+
+                        <div class="categoria">
+                            NATURALEZA
+                        </div>
+
+                    </div>
+
+                    <div class="tarjeta-info">
+
+                        <div class="datos-dibujo">
+
+                            <h3>
+                                Atardecer en la playa
+                            </h3>
+
+                            <p>
+                                @samuelart
+                            </p>
+
+                        </div>
+
+
+                        <div class="acciones">
+
+                            <button class="accion" type="button">
+                                <span>♥</span>
+                                298
+                            </button>
+
+                            <button class="accion compartir" type="button">
+                                ↗
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- TARJETA 6 -->
+
+                <article class="tarjeta">
+
+                    <div class="imagen-contenedor">
+
+                        <img
+                            src="img/dibujo6.jpg"
+                            alt="Lobo en la naturaleza"
+                        >
+
+                        <div class="categoria">
+                            LÁPIZ
+                        </div>
+
+                    </div>
+
+                    <div class="tarjeta-info">
+
+                        <div class="datos-dibujo">
+
+                            <h3>
+                                Lobo en la naturaleza
+                            </h3>
+
+                            <p>
+                                @nicolas_art
+                            </p>
+
+                        </div>
+
+
+                        <div class="acciones">
+
+                            <button class="accion" type="button">
+                                <span>♥</span>
+                                367
+                            </button>
+
+                            <button class="accion compartir" type="button">
+                                ↗
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- TARJETA 7 -->
+
+                <article class="tarjeta">
+
+                    <div class="imagen-contenedor">
+
+                        <img
+                            src="img/dibujo7.jpg"
+                            alt="Colores en la mente"
+                        >
+
+                        <div class="categoria">
+                            ABSTRACTO
+                        </div>
+
+                    </div>
+
+                    <div class="tarjeta-info">
+
+                        <div class="datos-dibujo">
+
+                            <h3>
+                                Colores en la mente
+                            </h3>
+
+                            <p>
+                                @alejandro.draw
+                            </p>
+
+                        </div>
+
+
+                        <div class="acciones">
+
+                            <button class="accion" type="button">
+                                <span>♥</span>
+                                154
+                            </button>
+
+                            <button class="accion compartir" type="button">
+                                ↗
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                <!-- TARJETA 8 -->
+
+                <article class="tarjeta">
+
+                    <div class="imagen-contenedor">
+
+                        <img
+                            src="img/dibujo8.jpg"
+                            alt="Dragón en el horizonte"
+                        >
+
+                        <div class="categoria">
+                            FANTASÍA
+                        </div>
+
+                    </div>
+
+                    <div class="tarjeta-info">
+
+                        <div class="datos-dibujo">
+
+                            <h3>
+                                Dragón en el horizonte
+                            </h3>
+
+                            <p>
+                                @tomas_illustra
+                            </p>
+
+                        </div>
+
+
+                        <div class="acciones">
+
+                            <button class="accion" type="button">
+                                <span>♥</span>
+                                393
+                            </button>
+
+                            <button class="accion compartir" type="button">
+                                ↗
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer class="footer">
+
+        <div class="footer-contenido">
+
+
+            <div class="footer-logo">
+
+                <div class="logo-icon">
+                    🎨
+                </div>
+
+                <strong>
+                    Galería de Dibujos
+                </strong>
+
+            </div>
+
+
+            <p>
+                El arte nos conecta. Comparte, inspira, crea.
+            </p>
+
+
+            <div class="redes">
+
+                <a href="#" aria-label="Instagram">
+                    Instagram
+                </a>
+
+                <a href="#" aria-label="X">
+                    X
+                </a>
+
+                <a href="#" aria-label="YouTube">
+                    YouTube
+                </a>
+
+                <a href="#" aria-label="Discord">
+                    Discord
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-line">
+
+            <span>
+                © 2026 Galería de Dibujos
+            </span>
+
+            <span>
+                Todos los derechos reservados
+            </span>
+
+        </div>
+
+    </footer>
+
+
+</body>
+</html>
