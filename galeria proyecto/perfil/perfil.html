@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Galería de Dibujos</title>
+    <link rel="stylesheet" href="perfil.css">
+</head>
+<body>
+
+    <!-- BARRA SUPERIOR (NAVBAR) -->
+    <header class="navbar">
+        <a href="../index.html" class="logo-container">
+            <div class="logo-icon">🎨</div>
+            <span>Galería de Dibujos</span>
+        </a>
+        <div class="nav-actions">
+            <a href="../index.html" class="nav-link">Inicio</a>
+            <button id="btn-cerrar-sesion" class="btn-logout">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <!-- CONTENEDOR DEL PERFIL -->
+    <main class="profile-container">
+        <!-- TARJETA CABECERA DEL USUARIO -->
+        <section class="profile-header-card">
+            <div class="avatar-container">
+                <div class="avatar-placeholder" id="avatar-inicial">U</div>
+            </div>
+            <div class="user-details">
+                <h1 id="user-display-name">Nombre de Usuario</h1>
+                <p id="user-display-tag" class="user-tag">@usuario</p>
+                <p id="user-display-email" class="user-email">correo@ejemplo.com</p>
+            </div>
+            <button class="btn-edit-profile" id="btn-editar-perfil">Editar Perfil</button>
+        </section>
+
+        <!-- SECCIÓN DE PUBLICACIONES / GALERÍA PERSONAL -->
+        <section class="gallery-section">
+            <div class="gallery-header">
+                <h2>Mis Dibujos</h2>
+                <button class="btn-primary" id="btn-nuevo-dibujo">+ Subir Dibujo</button>
+            </div>
+
+            <!-- GRID PARA MOSTRAR LAS PUBLICACIONES -->
+            <div class="gallery-grid" id="gallery-grid">
+                <div class="empty-state">
+                    <p>🎨 Aún no has publicado ningún dibujo.</p>
+                    <small>¡Haz clic en "+ Subir Dibujo" para compartir tu primera creación!</small>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="perfil.js"></script>
+</body>
+</html>
