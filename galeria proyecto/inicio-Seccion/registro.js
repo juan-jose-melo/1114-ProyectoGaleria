@@ -1,40 +1,73 @@
+/* =========================================================
+   ARCHIVO: registro.js
+   Manejo de registro de usuario guardando directo en SQLite
+   ========================================================= */
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Referencias a los elementos del formulario HTML
     const registerForm = document.getElementById('form-register');
+    const emailInput = document.getElementById('reg-email');
+    const passwordInput = document.getElementById('reg-password');
+    const alertBox = document.getElementById('alert-box');
 
-    // Procesar envío del registro
-    registerForm.addEventListener('submit', (e) => {
+    if (!registerForm) return;
+
+    registerForm.addEventListener('submit', async (e) => {
+        // Evitar que el navegador recargue la página o envíe el formulario de forma nativa
         e.preventDefault();
+        e.stopImmediatePropagation();
 
-        const name = document.getElementById('reg-name').value;
-        const email = document.getElementById('reg-email').value;
-        const password = document.getElementById('reg-password').value;
+        const email = emailInput ? emailInput.value.trim() : '';
+        const password = passwordInput ? passwordInput.value.trim() : '';
 
-        // Cargar lista existente de usuarios en localStorage
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-
-        // Validar si el correo ya fue registrado anteriormente
-        const userExists = users.some(u => u.email === email);
-        if (userExists) {
-            showAlert('Este correo electrónico ya está registrado.', 'error');
+        // 1. Validar que los campos no estén vacíos
+        if (email === '' || password === '') {
+            mostrarAlerta('Por favor, completa todos los campos para registrarte.', 'error');
             return;
         }
 
-        // Guardar nuevo usuario
-        users.push({ name, email, password });
-        localStorage.setItem('users', JSON.stringify(users));
+        try {
+            // 2. Enviar datos al backend (Node.js / Express / SQLite)
+            const response = await fetch('http://localhost:3000/api/registro', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({ email, password })
+            });
 
-        showAlert('¡Cuenta creada exitosamente! Redirigiendo...', 'success');
+            const data = await response.json();
 
-        // Redirigir a la página de iniciar sesión
-        setTimeout(() => {
-            window.location.href = 'iniciar-sesion.html';
-        }, 1500);
+            // 3. Evaluar respuesta del servidor
+            if (data.success) {
+                mostrarAlerta('¡Cuenta creada con éxito! Redirigiendo...', 'success');
+
+                // 4. Redirigir a la pantalla de iniciar sesión
+                setTimeout(() => {
+                    window.location.href = 'iniciar-sesion.html';
+                }, 1200);
+            } else {
+                mostrarAlerta(data.message || 'Error al registrar la cuenta.', 'error');
+            }
+
+        } catch (error) {
+            mostrarAlerta('No se pudo conectar con el servidor. Asegúrate de ejecutar "node server.js".', 'error');
+        }
     });
-});
 
-function showAlert(message, type) {
-    const alertBox = document.getElementById('alert-box');
-    alertBox.innerText = message;
-    alertBox.className = `alert-message ${type === 'success' ? 'alert-success' : 'alert-error'}`;
-    alertBox.style.display = 'block';
-}
+    // Función auxiliar para mostrar alertas en pantalla
+    function mostrarAlerta(mensaje, tipo) {
+        if (!alertBox) return;
+
+        alertBox.textContent = mensaje;
+        alertBox.className = 'alert-message'; // Limpiar clases previas
+
+        if (tipo === 'success') {
+            alertBox.classList.add('alert-success');
+        } else if (tipo === 'error') {
+            alertBox.classList.add('alert-error');
+        }
+
+        alertBox.style.display = 'block';
+    }
+});

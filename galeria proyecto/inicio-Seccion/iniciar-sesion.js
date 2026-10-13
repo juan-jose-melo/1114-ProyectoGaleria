@@ -1,65 +1,86 @@
 /* =========================================================
    ARCHIVO: iniciar-sesion.js
-   Valida las credenciales y redirige según el estado del perfil
+   Manejo de inicio de sesión consultando directamente a SQLite
    ========================================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
-    const loginForm = document.getElementById('form-login');
+    // 1. Obtener referencias a los elementos del DOM en tu HTML
+    const loginForm = document.getElementById('form-login') || document.getElementById('loginForm');
+    const emailInput = document.getElementById('login-email') || document.getElementById('email');
+    const passwordInput = document.getElementById('login-password') || document.getElementById('password');
+    const alertBox = document.getElementById('alert-box') || document.getElementById('alertMessage');
 
     if (!loginForm) return;
 
-    // Procesar el envío del formulario de inicio de sesión
-    loginForm.addEventListener('submit', (e) => {
+    loginForm.addEventListener('submit', async (e) => {
+        // Evita que el navegador recargue la página automáticamente
         e.preventDefault();
-
-        const emailInput = document.getElementById('login-email');
-        const passwordInput = document.getElementById('login-password');
+        e.stopImmediatePropagation();
 
         const email = emailInput ? emailInput.value.trim() : '';
         const password = passwordInput ? passwordInput.value.trim() : '';
 
-        // 1. Intentar validar usando la lista de usuarios (si usas array de 'users')
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        const userFound = users.find(u => u.email === email && u.password === password);
+        // Validar que no se envíen campos vacíos
+        if (!email || !password) {
+            mostrarAlerta('Por favor, ingresa tu correo y contraseña.', 'error');
+            return;
+        }
 
-        // 2. Intentar validar usando las credenciales simples de registro
-        const emailGuardado = localStorage.getItem('usuarioRegistradoEmail');
-        const passwordGuardada = localStorage.getItem('usuarioRegistradoPassword');
+        try {
+            // 2. Consulta al backend de Node.js / SQLite
+            const response = await fetch('http://localhost:3000/api/login', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({ email, password })
+            });
 
-        const esValidoSimple = (email === emailGuardado && password === passwordGuardada && email !== '');
+            const data = await response.json();
 
-        if (userFound || esValidoSimple) {
-            // Guardar usuario activo en sesión
-            localStorage.setItem('sesionIniciada', 'true');
-            localStorage.setItem('emailUsuario', email);
+            // 3. Evaluar respuesta del servidor
+            if (data.success) {
+                mostrarAlerta('¡Inicio de sesión exitoso! Redirigiendo...', 'success');
 
-            showAlert(`¡Bienvenido de nuevo!`, 'success');
+                // Guardar la sesión activa del usuario actual
+                localStorage.setItem('sesionIniciada', 'true');
+                localStorage.setItem('emailUsuario', data.email);
+                localStorage.setItem('nombreUsuario', data.nombre || '');
+                localStorage.setItem('tagUsuario', data.tag || '');
 
-            // 🔑 LÓGICA DE REDIRECCIÓN INTELIGENTE
-            setTimeout(() => {
-                const perfilCompletado = localStorage.getItem('perfilCompletado');
+                // 4. Redirección inteligente
+                setTimeout(() => {
+                    // Si en SQLite la cuenta ya tiene perfilCompletado = 1 (true)
+                    if (data.perfilCompletado) {
+                        window.location.href = '../perfil/perfil.html';
+                    } else {
+                        // Si es una cuenta nueva o con perfilCompletado = 0 (false)
+                        window.location.href = '../completar-perfil/completar-perfil.html';
+                    }
+                }, 1000);
 
-                if (perfilCompletado === 'true') {
-                    // Si YA configuró el perfil previamente -> Va directo a Perfil
-                    window.location.href = '../perfil/perfil.html';
-                } else {
-                    // Si ES LA PRIMERA VEZ -> Va a completar el perfil
-                    window.location.href = '../completar-perfil/completar-perfil.html';
-                }
-            }, 1200);
+            } else {
+                mostrarAlerta(data.message || 'Correo o contraseña incorrectos.', 'error');
+            }
 
-        } else {
-            showAlert('Correo o contraseña incorrectos. Inténtalo de nuevo.', 'error');
+        } catch (error) {
+            mostrarAlerta('Error de conexión con el servidor. Verifica que "node server.js" esté ejecutándose.', 'error');
         }
     });
+
+    // Función para mostrar alertas rojas o verdes
+    function mostrarAlerta(mensaje, tipo) {
+        if (!alertBox) return;
+
+        alertBox.textContent = mensaje;
+        alertBox.className = 'alert-message';
+
+        if (tipo === 'success') {
+            alertBox.classList.add('alert-success');
+        } else if (tipo === 'error') {
+            alertBox.classList.add('alert-error');
+        }
+
+        alertBox.style.display = 'block';
+    }
 });
-
-// Función para mostrar los mensajes de alerta
-function showAlert(message, type) {
-    const alertBox = document.getElementById('alert-box');
-    if (!alertBox) return;
-
-    alertBox.innerText = message;
-    alertBox.className = `alert-message ${type === 'success' ? 'alert-success' : 'alert-error'}`;
-    alertBox.style.display = 'block';
-}
