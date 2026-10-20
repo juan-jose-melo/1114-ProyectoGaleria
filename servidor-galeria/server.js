@@ -3,10 +3,13 @@ const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 
 const app = express();
-app.use(express.json());
+
+// AUMENTAR EL LÍMITE DE TAMAÑO PARA PERMITIR IMÁGENES LOCALES (50MB)
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
 
-// Conexión a SQLite (crea galeria.db automáticamente si no existe)
+// Conexión a SQLite
 const db = new sqlite3.Database('./galeria.db', (err) => {
     if (err) {
         console.error('Error al conectar con SQLite:', err.message);
@@ -27,10 +30,21 @@ db.run(`
     )
 `);
 
-// 1. Registro de usuarios
+// Crear tabla de dibujos si no existe
+db.run(`
+    CREATE TABLE IF NOT EXISTS dibujos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        emailUsuario TEXT NOT NULL,
+        nombreUsuario TEXT NOT NULL,
+        titulo TEXT NOT NULL,
+        imagenUrl TEXT NOT NULL,
+        fecha DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+`);
+
+// 1. Registro
 app.post('/api/registro', (req, res) => {
     const { email, password } = req.body;
-
     const query = `INSERT INTO usuarios (email, password, perfilCompletado) VALUES (?, ?, 0)`;
     db.run(query, [email, password], function (err) {
         if (err) {
@@ -40,10 +54,9 @@ app.post('/api/registro', (req, res) => {
     });
 });
 
-// 2. Inicio de Sesión
+// 2. Login
 app.post('/api/login', (req, res) => {
     const { email, password } = req.body;
-
     const query = `SELECT * FROM usuarios WHERE email = ? AND password = ?`;
     db.get(query, [email, password], (err, usuario) => {
         if (err) {
@@ -64,17 +77,39 @@ app.post('/api/login', (req, res) => {
     });
 });
 
-// 3. Completar/Editar Perfil
+// 3. Completar Perfil
 app.post('/api/completar-perfil', (req, res) => {
     const { email, nombre, tag } = req.body;
-
     const query = `UPDATE usuarios SET nombre = ?, tag = ?, perfilCompletado = 1 WHERE email = ?`;
     db.run(query, [nombre, tag, email], function (err) {
         if (err) {
             return res.status(500).json({ success: false, message: 'Error al actualizar el perfil.' });
         }
-
         res.json({ success: true, message: 'Perfil actualizado con éxito.' });
+    });
+});
+
+// 4. Guardar un nuevo dibujo
+app.post('/api/dibujos', (req, res) => {
+    const { emailUsuario, nombreUsuario, titulo, imagenUrl } = req.body;
+    const query = `INSERT INTO dibujos (emailUsuario, nombreUsuario, titulo, imagenUrl) VALUES (?, ?, ?, ?)`;
+    
+    db.run(query, [emailUsuario, nombreUsuario, titulo, imagenUrl], function(err) {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Error al publicar el dibujo.' });
+        }
+        res.json({ success: true, message: 'Dibujo publicado con éxito.' });
+    });
+});
+
+// 5. Obtener todos los dibujos
+app.get('/api/dibujos', (req, res) => {
+    const query = `SELECT * FROM dibujos ORDER BY fecha DESC`;
+    db.all(query, [], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Error al cargar dibujos.' });
+        }
+        res.json({ success: true, dibujos: rows });
     });
 });
 

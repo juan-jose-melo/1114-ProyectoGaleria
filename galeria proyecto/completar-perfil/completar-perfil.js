@@ -1,25 +1,19 @@
 /* =========================================================
    ARCHIVO: completar-perfil.js
-   Lógica blindada para guardar datos y forzar la redirección
+   Manejo de guardado de perfil y redirección a perfil.html
    ========================================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
     const formPerfil = document.getElementById('form-perfil');
+    const btnGuardar = document.getElementById('btn-guardar');
     const inputNombre = document.getElementById('nombre-completo');
     const inputTag = document.getElementById('usuario-tag');
     const alertBox = document.getElementById('alert-box');
 
-    if (!formPerfil) return;
-
-    formPerfil.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-
+    function procesarYRedirigir() {
         const nombre = inputNombre ? inputNombre.value.trim() : '';
         let tag = inputTag ? inputTag.value.trim() : '';
-        
-        // Si no hay email en localStorage, usar un valor por defecto para no bloquear la ejecución
-        const emailUsuario = localStorage.getItem('emailUsuario') || 'usuario_temporal@correo.com';
+        const emailUsuario = localStorage.getItem('emailUsuario') || 'usuario@correo.com';
 
         if (!nombre || !tag) {
             mostrarAlerta('Por favor completa tu nombre y usuario.', 'error');
@@ -30,43 +24,46 @@ document.addEventListener('DOMContentLoaded', () => {
             tag = `@${tag}`;
         }
 
-        // Guardar localmente de inmediato para asegurar que el perfil tenga los datos
+        // Guardar datos en la sesión local
         localStorage.setItem('nombreUsuario', nombre);
         localStorage.setItem('tagUsuario', tag);
         localStorage.setItem('perfilCompletado', 'true');
 
-        mostrarAlerta('¡Perfil configurado! Entrando a tu perfil...', 'success');
+        mostrarAlerta('¡Perfil configurado! Redirigiendo...', 'success');
 
-        // Intentar actualizar la base de datos en Node.js
-        try {
-            await fetch('http://localhost:3000/api/completar-perfil', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    email: emailUsuario,
-                    nombre: nombre,
-                    tag: tag
-                })
-            });
-        } catch (err) {
-            console.log('Servidor offline, pero continuando con la redirección local...');
-        }
+        // Petición al servidor
+        fetch('http://localhost:3000/api/completar-perfil', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: emailUsuario, nombre: nombre, tag: tag })
+        }).catch(() => console.log('Actualizando estado localmente...'));
 
-        // REDIRECCIÓN GARANTIZADA: Se ejecuta sí o sí tras 1 segundo
+        // Redirección a la carpeta /perfil/perfil.html
         setTimeout(() => {
-            // Ajustar ruta según la ubicación de tu carpeta de perfil
             window.location.href = '../perfil/perfil.html';
         }, 1000);
-    });
+    }
+
+    if (formPerfil) {
+        formPerfil.addEventListener('submit', (e) => {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            procesarYRedirigir();
+        });
+    }
+
+    if (btnGuardar) {
+        btnGuardar.addEventListener('click', (e) => {
+            if (formPerfil && !formPerfil.checkValidity()) return;
+            e.preventDefault();
+            procesarYRedirigir();
+        });
+    }
 
     function mostrarAlerta(mensaje, tipo) {
         if (!alertBox) return;
         alertBox.textContent = mensaje;
         alertBox.style.display = 'block';
-        alertBox.style.padding = '10px';
-        alertBox.style.marginTop = '10px';
-        alertBox.style.borderRadius = '5px';
-        alertBox.style.textAlign = 'center';
 
         if (tipo === 'success') {
             alertBox.style.backgroundColor = '#28a745';

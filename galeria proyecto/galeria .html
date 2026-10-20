@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Dibujos - Comunidad</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+    <!-- BARRA NAVEGACIÓN -->
+    <header class="navbar">
+        <a href="index.html" class="logo-container">
+            <div class="logo-icon">🎨</div>
+            <span>Galería de Dibujos</span>
+        </a>
+        <div class="user-menu">
+            <span id="user-display">Cargando...</span>
+            <a href="perfil/perfil.html" class="btn-profile">Mi Perfil</a>
+            <button id="btn-logout" class="btn-logout">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <!-- BANNER Y CONTROLES -->
+    <section class="gallery-hero">
+        <h1>Explora las creaciones de la comunidad</h1>
+        <p>Inspírate, comparte tus ilustraciones y conecta con otros artistas.</p>
+        <button id="btn-subir" class="btn-primary">+ Subir nuevo dibujo</button>
+    </section>
+
+    <!-- GRILLA DE DIBUJOS -->
+    <main class="main-container">
+        <h2 class="section-title">Dibujos Recientes</h2>
+        <div id="grid-dibujos" class="drawings-grid">
+            <!-- Los dibujos se cargan dinámicamente con JS -->
+        </div>
+    </main>
+
+    <!-- MODAL PARA SUBIR DIBUJO -->
+    <div id="modal-subir" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3>Subir nuevo dibujo</h3>
+            <form id="form-subir-dibujo">
+                <input type="text" id="titulo-dibujo" placeholder="Título del dibujo" required class="form-control">
+                <input type="url" id="url-dibujo" placeholder="URL de la imagen (ej: https://...)" required class="form-control">
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-primary">Publicar</button>
+                    <button type="button" id="btn-cancelar" class="btn-logout">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="galeria.js"></script>
+</body>
+</html>
