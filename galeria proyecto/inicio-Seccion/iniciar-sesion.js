@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('http://localhost:3000/api/login', {
+            const response = await fetch('https://1114-proyectogaleria.onrender.com/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })
@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
         } catch (error) {
-            mostrarAlerta('Error de conexión con el servidor. Ejecuta "node server.js".', 'error');
+            mostrarAlerta('Error de conexión con el servidor en Render.', 'error');
         }
     });
 

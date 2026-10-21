@@ -1,6 +1,6 @@
 /* =========================================================
    ARCHIVO: registro.js
-   Manejo de registro de usuario guardando directo en SQLite
+   Manejo de registro de usuario guardando directo en SQLite (Render)
    ========================================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -27,8 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            // 2. Enviar datos al backend (Node.js / Express / SQLite)
-            const response = await fetch('http://localhost:3000/api/registro', {
+            // 2. Enviar datos al backend en Render
+            const response = await fetch('https://1114-proyectogaleria.onrender.com/api/registro', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json' 
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
         } catch (error) {
-            mostrarAlerta('No se pudo conectar con el servidor. Asegúrate de ejecutar "node server.js".', 'error');
+            mostrarAlerta('No se pudo conectar con el servidor en la nube.', 'error');
         }
     });
 

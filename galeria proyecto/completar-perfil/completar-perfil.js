@@ -1,7 +1,9 @@
 /* =========================================================
    ARCHIVO: completar-perfil.js
-   Manejo de guardado de perfil y redirección a perfil.html
+   Manejo de guardado de perfil y redirección a perfil.html (Render)
    ========================================================= */
+
+const API_URL = 'https://1114-proyectogaleria.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
     const formPerfil = document.getElementById('form-perfil');
@@ -31,8 +33,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         mostrarAlerta('¡Perfil configurado! Redirigiendo...', 'success');
 
-        // Petición al servidor
-        fetch('http://localhost:3000/api/completar-perfil', {
+        // Petición al servidor alojado en Render
+        fetch(`${API_URL}/api/completar-perfil`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: emailUsuario, nombre: nombre, tag: tag })

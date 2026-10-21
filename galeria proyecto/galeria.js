@@ -1,7 +1,9 @@
 /* =========================================================
    ARCHIVO: galeria.js
-   Manejo de vista principal, modal y conexión a SQLite
+   Manejo de vista principal, modal y conexión a SQLite (Render)
    ========================================================= */
+
+const API_URL = 'https://1114-proyectogaleria.onrender.com';
 
 document.addEventListener('DOMContentLoaded', () => {
     const userDisplay = document.getElementById('user-display');
@@ -46,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const imagenUrl = document.getElementById('url-dibujo').value.trim();
 
             try {
-                const response = await fetch('http://localhost:3000/api/dibujos', {
+                const response = await fetch(`${API_URL}/api/dibujos`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ emailUsuario, nombreUsuario, titulo, imagenUrl })
@@ -68,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function cargarDibujos() {
         if (!gridDibujos) return;
         try {
-            const response = await fetch('http://localhost:3000/api/dibujos');
+            const response = await fetch(`${API_URL}/api/dibujos`);
             const data = await response.json();
 
             if (data.success && data.dibujos.length > 0) {

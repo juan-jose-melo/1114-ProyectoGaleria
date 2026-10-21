@@ -3,6 +3,8 @@
    Manejo de vista, subida de archivos locales/URL y modal
    ========================================================= */
 
+const API_URL = 'https://1114-proyectogaleria.onrender.com';
+
 document.addEventListener('DOMContentLoaded', () => {
     // Elementos del DOM del perfil
     const elNombre = document.getElementById('perfil-nombre');
@@ -105,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                const response = await fetch('http://localhost:3000/api/dibujos', {
+                const response = await fetch(`${API_URL}/api/dibujos`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ emailUsuario, nombreUsuario, titulo, imagenUrl })
@@ -120,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('Error al publicar: ' + data.message);
                 }
             } catch (err) {
-                alert('Error de conexión con el servidor. Verifica que "node server.js" esté activo.');
+                alert('Error de conexión con el servidor en Render.');
             }
         });
     }
@@ -129,7 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function cargarMisDibujos() {
         if (!gridMisDibujos) return;
         try {
-            const response = await fetch('http://localhost:3000/api/dibujos');
+            const response = await fetch(`${API_URL}/api/dibujos`);
             const data = await response.json();
 
             if (data.success) {
