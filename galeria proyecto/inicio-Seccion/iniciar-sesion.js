@@ -2,6 +2,9 @@
    ARCHIVO: iniciar-sesion.js
    ========================================================= */
 
+const API_URL = 'http://localhost:3000';
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('form-login') || document.getElementById('loginForm');
     const emailInput = document.getElementById('login-email') || document.getElementById('email');
@@ -23,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('https://1114-proyectogaleria.onrender.com/api/login', {
+            const response = await fetch(`${API_URL}/api/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password })

@@ -3,6 +3,10 @@
    Manejo de registro de usuario guardando directo en SQLite (Render)
    ========================================================= */
 
+const API_URL = 'http://localhost:3000';
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
     // Referencias a los elementos del formulario HTML
     const registerForm = document.getElementById('form-register');
@@ -28,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             // 2. Enviar datos al backend en Render
-            const response = await fetch('https://1114-proyectogaleria.onrender.com/api/registro', {
+            const response = await fetch(`${API_URL}/api/registro`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json' 

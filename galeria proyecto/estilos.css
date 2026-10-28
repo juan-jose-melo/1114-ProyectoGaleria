@@ -1438,3 +1438,63 @@ button {
     gap: 20px;
     padding: 30px;
 }
+
+/* Colmena social y edición de obras */
+.gallery-hero { background: radial-gradient(circle at 15% 15%, #eeeaff 0, transparent 35%), linear-gradient(135deg,#fff 0%,#f7f4ff 100%); color:#28243d; border-bottom:1px solid #eee8ff; }
+.gallery-hero p { color:#77708f; }
+.btn-primary { background:linear-gradient(135deg,#7562ff,#5d4ce5); color:#fff; box-shadow:0 7px 18px #6657ff30; transition:transform .18s,box-shadow .18s; }
+.btn-primary:hover { transform:translateY(-1px); box-shadow:0 10px 22px #6657ff40; }
+.btn-profile { background:#f0edff; color:#5e4bd8; border:1px solid #e2dcff; }
+.btn-logout { background:#f4f1ff; color:#6556a4; }
+.modal-overlay { position:fixed; inset:0; z-index:2000; background:rgba(28,20,55,.46); backdrop-filter:blur(7px); align-items:center; justify-content:center; padding:20px; }
+.modal-content { position:relative; width:min(100%,520px); padding:30px; border:1px solid #eee9ff; border-radius:24px; background:rgba(255,255,255,.98); color:#29253d; box-shadow:0 24px 80px #25164a35; }
+.edit-modal-content h3 { margin:6px 0 4px; font-size:1.55rem; color:#28243d; }
+.modal-eyebrow { color:#7562e8; font-size:.72rem; font-weight:800; letter-spacing:.14em; }
+.modal-subtitle { color:#77708f; margin-bottom:22px; font-size:.94rem; }
+.edit-modal-content label { display:block; margin:14px 0 7px; color:#39334f; font-size:.9rem; font-weight:700; }
+.edit-modal-content .form-control { width:100%; border:1px solid #e4def6; border-radius:12px; padding:12px 14px; font:inherit; color:#29253d; background:#fcfbff; outline:none; transition:border-color .2s,box-shadow .2s; }
+.edit-modal-content .form-control:focus { border-color:#8b7bff; box-shadow:0 0 0 4px #7663ff1c; }
+.modal-buttons { display:flex; gap:10px; margin-top:22px; }
+.modal-buttons button { flex:1; min-height:44px; border-radius:12px; }
+.btn-soft { border:1px solid #e5def8; background:#f7f4ff; color:#6556a4; padding:10px 16px; font-weight:700; cursor:pointer; }
+.modal-close { position:absolute; right:16px; top:12px; border:0; background:transparent; color:#7b7395; font-size:1.8rem; cursor:pointer; }
+.card-dibujo { transition:transform .2s,box-shadow .2s; }
+.card-dibujo:hover { transform:translateY(-3px); box-shadow:0 14px 30px #28144b16 !important; }
+.like-btn { border-radius:999px !important; }
+.comments-toggle,.edit-post { border-radius:999px !important; border:1px solid #e7e0fb !important; }
+.comments-box { background:#fbfaff; border-radius:14px; padding:14px !important; margin-top:10px; }
+@media(max-width:680px) { .navbar { height:auto; padding:14px 5%; align-items:flex-start; gap:12px; flex-wrap:wrap; } .user-menu { flex-wrap:wrap; gap:8px; } .modal-content { padding:24px 20px; } .modal-buttons { flex-direction:column; } }
+
+.hero-actions { display:flex; justify-content:center; align-items:center; gap:12px; flex-wrap:wrap; margin-top:20px; } .btn-colmena { display:inline-flex; align-items:center; justify-content:center; padding:12px 20px; border-radius:12px; background:#fff; color:#6554d8; border:1px solid #e1d9ff; font-weight:800; box-shadow:0 5px 15px #5d4ce510; } .btn-colmena:hover { background:#f4f0ff; }
+
+
+/* Ajustes finales: navegación a La Colmena y edición visible */
+.btn-colmena-nav { font-weight: 800; border-radius: 12px; }
+.edit-post {
+  display:inline-flex; align-items:center; justify-content:center; gap:7px;
+  padding:10px 15px; border-radius:999px; border:1px solid #dcd3ff;
+  background:linear-gradient(135deg,#f8f5ff,#eee9ff); color:#5945cc;
+  font:inherit; font-size:.9rem; font-weight:800; cursor:pointer;
+  box-shadow:0 3px 10px #5d4ce512; transition:transform .18s, box-shadow .18s, background .18s;
+}
+.edit-post:hover { transform:translateY(-1px); background:#eae4ff; box-shadow:0 7px 16px #5d4ce51f; }
+.edit-post:focus-visible, .btn-colmena:focus-visible, .btn-colmena-nav:focus-visible {
+  outline:3px solid #b8aaff; outline-offset:3px;
+}
+.modal-overlay[style*="display: flex"] { display:flex !important; }
+.edit-modal-content { max-height:90vh; overflow-y:auto; }
+
+/* Renovación visual de La Colmena: coherente con el index */
+.gallery-hero { position:relative; overflow:hidden; padding:64px 20px 56px; background:radial-gradient(circle at 12% 18%,#e9e3ff 0,transparent 30%),radial-gradient(circle at 88% 70%,#f0eaff 0,transparent 28%),linear-gradient(135deg,#fff 0%,#f8f5ff 55%,#f1edff 100%); }
+.gallery-hero h1 { color:#28243d; font-size:clamp(2.1rem,5vw,3.6rem); letter-spacing:-.045em; animation:colmenaTitleIn .85s cubic-bezier(.2,.8,.2,1) both; }
+.gallery-hero p { max-width:680px; margin:16px auto 22px; line-height:1.75; animation:colmenaFadeUp .9s .12s both; }
+@keyframes colmenaTitleIn { from { opacity:0; transform:translateY(18px); filter:blur(5px); } to { opacity:1; transform:translateY(0); filter:blur(0); } }
+@keyframes colmenaFadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+.main-container { max-width:1440px; margin:0 auto; padding:32px 4% 70px; }
+.section-title { color:#292541; letter-spacing:-.035em; font-size:clamp(1.6rem,3vw,2.25rem); animation:colmenaTitleIn .7s .08s both; }
+.ranking-subtitle { color:#77708f; margin-top:-8px; margin-bottom:20px; }
+.navbar { background:rgba(255,255,255,.92); color:#292541; border-bottom:1px solid #eee8ff; box-shadow:0 5px 24px #28144b08; }
+.navbar .logo-container { color:#292541; font-weight:800; text-decoration:none; }
+.navbar .logo-icon { background:linear-gradient(135deg,#7562ff,#5d4ce5); color:#fff; border-radius:12px; display:grid; place-items:center; font-weight:900; }
+.drawings-grid { padding:24px 0; }
+@media(prefers-reduced-motion:reduce) { .gallery-hero h1,.gallery-hero p,.section-title { animation:none; } }

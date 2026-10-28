@@ -3,7 +3,12 @@
    Manejo de vista, subida de archivos locales/URL y modal
    ========================================================= */
 
-const API_URL = 'https://1114-proyectogaleria.onrender.com';
+// Funciona tanto al abrir archivos locales como desde el servidor Express.
+const API_URL = window.location.protocol === 'file:'
+    ? 'http://localhost:3000'
+    : window.location.origin;
+
+const escapeHTML = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
 document.addEventListener('DOMContentLoaded', () => {
     // Elementos del DOM del perfil
@@ -88,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const titulo = document.getElementById('titulo-dibujo').value.trim();
             const inputUrl = document.getElementById('url-dibujo').value.trim();
+            const descripcion = document.getElementById('descripcion-dibujo').value.trim();
 
             let imagenUrl = '';
 
@@ -110,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const response = await fetch(`${API_URL}/api/dibujos`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ emailUsuario, nombreUsuario, titulo, imagenUrl })
+                    body: JSON.stringify({ emailUsuario, nombreUsuario, titulo, descripcion, imagenUrl })
                 });
 
                 const data = await response.json();
@@ -131,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function cargarMisDibujos() {
         if (!gridMisDibujos) return;
         try {
-            const response = await fetch(`${API_URL}/api/dibujos`);
+            const response = await fetch(`${API_URL}/api/dibujos?email=${encodeURIComponent(emailUsuario)}`);
             const data = await response.json();
 
             if (data.success) {
@@ -145,7 +151,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     gridMisDibujos.innerHTML = misDibujos.map(d => `
                         <div class="card-dibujo" style="background: #ffffff; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden; padding: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
                             <img src="${d.imagenUrl}" alt="${d.titulo}" style="width: 100%; height: 160px; object-fit: cover; border-radius: 5px;" onerror="this.src='https://via.placeholder.com/300?text=Error+de+Imagen'">
-                            <h4 style="margin: 10px 0 0 0; color: #333;">${d.titulo}</h4>
+                            <h4 style="margin: 10px 0 0 0; color: #333;">${escapeHTML(d.titulo)}</h4>
+                            <p style="color:#666;white-space:pre-wrap">${escapeHTML(d.descripcion || '')}</p>
+                            <p style="color:#777">♡ ${Number(d.likes)||0} · ${Number(d.comentariosCount)||0} comentarios</p>
+                            <button type="button" class="editar-mi-dibujo" data-id="${d.id}" data-titulo="${escapeHTML(d.titulo)}" data-descripcion="${escapeHTML(d.descripcion || '')}">Editar título y descripción</button>
                         </div>
                     `).join('');
                 } else {
@@ -162,5 +171,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    if (gridMisDibujos) gridMisDibujos.addEventListener('click', async (e) => {
+        const btn = e.target.closest('.editar-mi-dibujo'); if (!btn) return;
+        const titulo = prompt('Editar título:', btn.dataset.titulo); if (titulo === null) return;
+        const descripcion = prompt('Editar descripción:', btn.dataset.descripcion); if (descripcion === null) return;
+        try {
+            const r = await fetch(`${API_URL}/api/dibujos/${btn.dataset.id}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({emailUsuario, titulo, descripcion}) });
+            const data = await r.json(); if (!r.ok || !data.success) throw new Error(data.message || 'No se pudo editar.');
+            cargarMisDibujos();
+        } catch (err) { alert(err.message || 'Error al editar la publicación.'); }
+    });
     cargarMisDibujos();
 });

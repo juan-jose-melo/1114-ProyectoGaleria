@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Colmena · Comunidad de artistas</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+    <!-- BARRA NAVEGACIÓN -->
+    <header class="navbar">
+        <a href="../index.html" class="logo-container">
+            <div class="logo-icon" aria-hidden="true">G</div>
+            <span>Galería de Dibujos</span>
+        </a>
+        <div class="user-menu">
+            <span id="user-display">Cargando...</span>
+            <a href="galeria%20.html" class="btn-profile">Mi galería</a>
+            <a href="inicio-Seccion/iniciar-sesion.html" class="btn-profile" id="btn-login">Iniciar sesión</a>
+            <a href="inicio-Seccion/registro.html" class="btn-profile" id="btn-register">Crear cuenta</a>
+            <a href="perfil/perfil.html" class="btn-profile" id="btn-mi-perfil">Mi Perfil</a>
+            <button id="btn-logout" class="btn-logout">Cerrar Sesión</button>
+        </div>
+    </header>
+
+    <!-- BANNER Y CONTROLES -->
+    <section class="gallery-hero">
+        <h1>La Colmena de artistas</h1>
+        <p>Descubre las obras de la comunidad, apoya a tus artistas favoritos y conversa sobre cada creación.</p>
+        <a class="btn-colmena" href="galeria%20.html" style="display:inline-flex;margin:8px 6px">Volver a mi galería</a>
+        <button id="btn-subir" class="btn-primary">+ Subir nuevo dibujo</button>
+    </section>
+
+    <!-- GRILLA DE DIBUJOS -->
+    <main class="main-container">
+        <h2 class="section-title">Obras más populares</h2><p class="ranking-subtitle">Las creaciones con más me gusta aparecen primero.</p>
+        <div id="grid-dibujos" class="drawings-grid">
+            <!-- Los dibujos se cargan dinámicamente con JS -->
+        </div>
+    </main>
+
+    <!-- MODAL PARA EDITAR PUBLICACIÓN -->
+    <div id="modal-editar" class="modal-overlay" style="display:none;">
+        <div class="modal-content edit-modal-content">
+            <button type="button" id="cerrar-editar" class="modal-close" aria-label="Cerrar">×</button>
+            <span class="modal-eyebrow">TU OBRA · COLMENA</span>
+            <h3>Editar publicación</h3>
+            <p class="modal-subtitle">Dale a tu obra el título y la historia que merece.</p>
+            <form id="form-editar-dibujo">
+                <label for="editar-titulo">Título de la obra</label>
+                <input type="text" id="editar-titulo" maxlength="120" placeholder="Ej. Atardecer violeta" required class="form-control">
+                <label for="editar-descripcion">Descripción</label>
+                <textarea id="editar-descripcion" maxlength="2000" placeholder="Cuéntanos la inspiración detrás de tu dibujo..." class="form-control" rows="4"></textarea>
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-primary">Guardar cambios</button>
+                    <button type="button" id="cancelar-editar" class="btn-soft">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL PARA SUBIR DIBUJO -->
+    <div id="modal-subir" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h3>Subir nuevo dibujo</h3>
+            <form id="form-subir-dibujo">
+                <input type="text" id="titulo-dibujo" placeholder="Título del dibujo" required class="form-control">
+                <textarea id="descripcion-dibujo" placeholder="Descripción del dibujo (opcional)" class="form-control" rows="3"></textarea>
+                <label class="form-control" style="display:block">Selecciona una imagen <input type="file" id="file-dibujo" accept="image/*"></label>
+                <input type="url" id="url-dibujo" placeholder="O pega la URL de la imagen (https://...)" class="form-control">
+                <div class="modal-buttons">
+                    <button type="submit" class="btn-primary">Publicar</button>
+                    <button type="button" id="btn-cancelar" class="btn-logout">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="colmena.js"></script>
+</body>
+</html>

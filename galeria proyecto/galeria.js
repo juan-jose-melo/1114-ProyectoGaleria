@@ -1,93 +1,98 @@
-/* =========================================================
-   ARCHIVO: galeria.js
-   Manejo de vista principal, modal y conexión a SQLite (Render)
-   ========================================================= */
-
-const API_URL = 'https://1114-proyectogaleria.onrender.com';
+const API_URL = window.location.protocol === 'file:' ? 'http://localhost:3000' : window.location.origin;
+const escapeHTML = (value) => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const readFile = file => new Promise((resolve, reject) => { const r = new FileReader(); r.onload = () => resolve(r.result); r.onerror = reject; r.readAsDataURL(file); });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const userDisplay = document.getElementById('user-display');
-    const btnLogout = document.getElementById('btn-logout');
-    const btnSubir = document.getElementById('btn-subir');
-    const modalSubir = document.getElementById('modal-subir');
-    const btnCancelar = document.getElementById('btn-cancelar');
-    const formSubir = document.getElementById('form-subir-dibujo');
-    const gridDibujos = document.getElementById('grid-dibujos');
+  const emailUsuario = (localStorage.getItem('emailUsuario') || '').toLowerCase();
+  const nombreUsuario = localStorage.getItem('nombreUsuario') || 'Artista';
+  const tagUsuario = localStorage.getItem('tagUsuario') || '';
+  const grid = document.getElementById('grid-dibujos');
+  const modal = document.getElementById('modal-subir');
+  const form = document.getElementById('form-subir-dibujo');
+  const editModal = document.getElementById('modal-editar');
+  const editForm = document.getElementById('form-editar-dibujo');
+  let editingId = null;
+  if (!emailUsuario) { location.href = 'inicio-Seccion/iniciar-sesion.html'; return; }
+  document.getElementById('user-display').textContent = `${nombreUsuario} (${tagUsuario})`;
+  document.getElementById('btn-logout').addEventListener('click', () => { localStorage.clear(); location.href = 'inicio-Seccion/iniciar-sesion.html'; });
+  document.getElementById('btn-subir').addEventListener('click', () => modal.style.display = 'flex');
+  document.getElementById('btn-cancelar').addEventListener('click', () => { modal.style.display = 'none'; form.reset(); });
+  const closeEdit = () => { editModal.style.display = 'none'; editForm.reset(); editingId = null; };
+  document.getElementById('cerrar-editar').addEventListener('click', closeEdit);
+  document.getElementById('cancelar-editar').addEventListener('click', closeEdit);
+  editModal.addEventListener('click', e => { if (e.target === editModal) closeEdit(); });
+  editForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    const titulo = document.getElementById('editar-titulo').value.trim();
+    const descripcion = document.getElementById('editar-descripcion').value.trim();
+    if (!titulo || !editingId) return;
+    const submit = editForm.querySelector('[type=submit]'); submit.disabled = true; submit.textContent = 'Guardando...';
+    try {
+      const r = await fetch(`${API_URL}/api/dibujos/${editingId}`, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({emailUsuario,titulo,descripcion}) });
+      const d = await r.json(); if (!r.ok || !d.success) throw new Error(d.message || 'No se pudieron guardar los cambios.');
+      closeEdit(); await cargarDibujos();
+    } catch(err) { alert(err.message || 'No se pudo editar la publicación.'); }
+    finally { submit.disabled = false; submit.textContent = 'Guardar cambios'; }
+  });
 
-    // 1. Validar Sesión
-    const emailUsuario = localStorage.getItem('emailUsuario');
-    const nombreUsuario = localStorage.getItem('nombreUsuario') || 'Artista';
-    const tagUsuario = localStorage.getItem('tagUsuario') || '';
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    const titulo = document.getElementById('titulo-dibujo').value.trim();
+    const descripcion = document.getElementById('descripcion-dibujo').value.trim();
+    const urlInput = document.getElementById('url-dibujo').value.trim();
+    const file = document.getElementById('file-dibujo').files[0];
+    if (!titulo || (!urlInput && !file)) { alert('Escribe un título y selecciona una imagen o pega un enlace.'); return; }
+    try {
+      const imagenUrl = file ? await readFile(file) : urlInput;
+      const response = await fetch(`${API_URL}/api/dibujos`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({emailUsuario,nombreUsuario,titulo,descripcion,imagenUrl}) });
+      const data = await response.json();
+      if (!response.ok || !data.success) throw new Error(data.message || 'No se pudo publicar.');
+      modal.style.display = 'none'; form.reset(); await cargarDibujos();
+    } catch(err) { alert(err.message || 'Error al publicar. Verifica que el servidor esté iniciado.'); }
+  });
 
-    if (!emailUsuario) {
-        window.location.href = 'inicio-Seccion/iniciar-sesion.html';
-        return;
+  async function cargarDibujos() {
+    try {
+      const response = await fetch(`${API_URL}/api/dibujos?email=${encodeURIComponent(emailUsuario)}`);
+      const data = await response.json();
+      if (!response.ok || !data.success) throw new Error();
+      if (!data.dibujos.length) { grid.innerHTML = '<p class="empty-msg">Aún no hay publicaciones. ¡Comparte el primer dibujo de la comunidad!</p>'; return; }
+      grid.innerHTML = data.dibujos.map(d => `<article class="card-dibujo" style="background:#fff;border:1px solid #e7e3f5;border-radius:14px;overflow:hidden;padding:12px;color:#26233a;box-shadow:0 4px 14px #24124b12;">
+        <img src="${escapeHTML(d.imagenUrl)}" alt="${escapeHTML(d.titulo)}" style="width:100%;height:260px;object-fit:contain;background:#f7f5fc;border-radius:8px" loading="lazy" onerror="this.alt='No se pudo cargar la imagen';this.style.opacity='.4'">
+        <div style="padding:5px 2px"><h3 style="margin:8px 0">${escapeHTML(d.titulo)}</h3><p style="margin:4px 0;color:#6c6680">Por <strong>${escapeHTML(d.nombreUsuario)}</strong> · ${escapeHTML(d.fecha || '')}</p><p style="white-space:pre-wrap">${escapeHTML(d.descripcion || '')}</p>
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0"><button class="btn-primary like-btn" data-id="${d.id}" style="background:${d.likedByMe?'#df4260':'#6657ff'}">${d.likedByMe?'♥ Te gusta':'♡ Me gusta'} · ${Number(d.likes)||0}</button><button class="btn-logout comments-toggle" data-id="${d.id}">💬 Comentarios (${Number(d.comentariosCount)||0})</button>${String(d.emailUsuario).toLowerCase()===emailUsuario?`<button class="edit-post" data-id="${d.id}" data-title="${escapeHTML(d.titulo)}" data-description="${escapeHTML(d.descripcion||'')}">✎ Editar título y descripción</button>`:''}</div>
+        <div class="comments-box" id="comments-${d.id}" style="display:none;border-top:1px solid #eee;padding-top:10px"><div class="comments-list" style="font-size:.92rem"></div><form class="comment-form" data-id="${d.id}" style="display:flex;gap:6px;margin-top:8px"><input class="form-control" name="contenido" maxlength="1000" placeholder="Escribe un comentario..." required style="flex:1;min-width:0"><button class="btn-primary" type="submit">Enviar</button></form></div></div></article>`).join('');
+    } catch { grid.innerHTML = '<p class="empty-msg">No se pudo conectar con el servidor. Comprueba que npm start esté ejecutándose.</p>'; }
+  }
+  grid.addEventListener('click', async e => {
+    const like = e.target.closest('.like-btn');
+    const toggle = e.target.closest('.comments-toggle');
+    const edit = e.target.closest('.edit-post');
+    if (like) {
+      like.disabled = true;
+      try { const r = await fetch(`${API_URL}/api/dibujos/${like.dataset.id}/like`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({emailUsuario})}); const d = await r.json(); if (!r.ok || !d.success) throw new Error(d.message); await cargarDibujos(); }
+      catch(err) { alert(err.message || 'No se pudo guardar el me gusta.'); like.disabled = false; }
     }
-
-    if (userDisplay) {
-        userDisplay.textContent = `${nombreUsuario} (${tagUsuario})`;
+    if (toggle) { const box = document.getElementById(`comments-${toggle.dataset.id}`); const open = box.style.display === 'none'; box.style.display = open ? 'block' : 'none'; if (open) await cargarComentarios(toggle.dataset.id); }
+    if (edit) {
+      editingId = edit.dataset.id;
+      document.getElementById('editar-titulo').value = edit.dataset.title || '';
+      document.getElementById('editar-descripcion').value = edit.dataset.description || '';
+      editModal.style.display = 'flex';
+      document.getElementById('editar-titulo').focus();
     }
-
-    // 2. Cerrar Sesión
-    if (btnLogout) {
-        btnLogout.addEventListener('click', () => {
-            localStorage.clear();
-            window.location.href = 'inicio-Seccion/iniciar-sesion.html';
-        });
-    }
-
-    // 3. Abrir / Cerrar Modal
-    if (btnSubir) btnSubir.addEventListener('click', () => modalSubir.style.display = 'flex');
-    if (btnCancelar) btnCancelar.addEventListener('click', () => modalSubir.style.display = 'none');
-
-    // 4. Publicar Dibujo
-    if (formSubir) {
-        formSubir.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const titulo = document.getElementById('titulo-dibujo').value.trim();
-            const imagenUrl = document.getElementById('url-dibujo').value.trim();
-
-            try {
-                const response = await fetch(`${API_URL}/api/dibujos`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ emailUsuario, nombreUsuario, titulo, imagenUrl })
-                });
-
-                const data = await response.json();
-                if (data.success) {
-                    modalSubir.style.display = 'none';
-                    formSubir.reset();
-                    cargarDibujos();
-                }
-            } catch (err) {
-                alert('Error al publicar el dibujo.');
-            }
-        });
-    }
-
-    // 5. Cargar Dibujos desde SQLite
-    async function cargarDibujos() {
-        if (!gridDibujos) return;
-        try {
-            const response = await fetch(`${API_URL}/api/dibujos`);
-            const data = await response.json();
-
-            if (data.success && data.dibujos.length > 0) {
-                gridDibujos.innerHTML = data.dibujos.map(d => `
-                    <div class="card-dibujo" style="background: #2b2b2b; border-radius: 8px; overflow: hidden; padding: 10px; color: white;">
-                        <img src="${d.imagenUrl}" alt="${d.titulo}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 5px;" onerror="this.src='https://via.placeholder.com/300?text=Error+de+Imagen'">
-                        <h3 style="margin: 10px 0 5px 0;">${d.titulo}</h3>
-                        <p style="font-size: 0.85rem; color: #aaa;">Por: ${d.nombreUsuario}</p>
-                    </div>
-                `).join('');
-            } else {
-                gridDibujos.innerHTML = '<p style="color: white; grid-column: 1/-1; text-align: center;">Aún no hay dibujos publicados. ¡Sé el primero en subir uno!</p>';
-            }
-        } catch (err) {
-            gridDibujos.innerHTML = '<p style="color: white; grid-column: 1/-1; text-align: center;">Error al conectar con el servidor.</p>';
-        }
-    }
-
-    cargarDibujos();
+  });
+  grid.addEventListener('submit', async e => {
+    const form = e.target.closest('.comment-form'); if (!form) return; e.preventDefault();
+    const contenido = new FormData(form).get('contenido');
+    try { const r = await fetch(`${API_URL}/api/dibujos/${form.dataset.id}/comentarios`, {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({emailUsuario,contenido})}); const d = await r.json(); if (!r.ok || !d.success) throw new Error(d.message); form.reset(); await cargarComentarios(form.dataset.id); await cargarDibujos(); document.getElementById(`comments-${form.dataset.id}`).style.display='block'; }
+    catch(err) { alert(err.message || 'No se pudo guardar el comentario.'); }
+  });
+  async function cargarComentarios(id) {
+    const box = document.getElementById(`comments-${id}`); if (!box) return;
+    const list = box.querySelector('.comments-list'); list.textContent = 'Cargando comentarios...';
+    try { const r = await fetch(`${API_URL}/api/dibujos/${id}/comentarios`); const d = await r.json(); if (!d.success) throw new Error(); list.innerHTML = d.comentarios.length ? d.comentarios.map(c=>`<p style="margin:8px 0"><strong>${escapeHTML(c.nombreUsuario)}</strong>: ${escapeHTML(c.contenido)} <small style="color:#888">${escapeHTML(c.fecha)}</small></p>`).join('') : '<p style="color:#777">Sé el primero en comentar.</p>'; }
+    catch { list.textContent = 'No se pudieron cargar los comentarios.'; }
+  }
+  cargarDibujos();
 });

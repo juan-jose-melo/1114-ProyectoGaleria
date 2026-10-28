@@ -10,12 +10,13 @@
 
     <!-- BARRA DE NAVEGACIÓN -->
     <header class="navbar">
-        <a href="../galeria.html" class="logo-container">
+        <a href="../galeria%20.html" class="logo-container">
             <div class="logo-icon">🎨</div>
             <span>Galería de Dibujos</span>
         </a>
         <div class="nav-links">
-            <a href="../galeria.html" class="btn-nav">Inicio</a>
+            <a href="../../index.html" class="btn-nav">Inicio</a>
+            <a href="../colmena.html" class="btn-nav">🐝 Explorar La Colmena</a>
             <button id="btn-logout" class="btn-logout">Cerrar Sesión</button>
         </div>
     </header>
@@ -50,7 +51,8 @@
         <div class="modal-content">
             <h3>Subir nuevo dibujo</h3>
             <form id="form-subir-dibujo">
-                <input type="text" id="titulo-dibujo" placeholder="Título del dibujo" required class="form-control">
+                <input type="text" id="titulo-dibujo" placeholder="Título del dibujo" required maxlength="150" class="form-control">
+                <textarea id="descripcion-dibujo" placeholder="Descripción del dibujo (opcional)" maxlength="2000" class="form-control" rows="3"></textarea>
                 
                 <!-- Selector personalizado para archivos desde el equipo -->
                 <label style="font-weight: 600; font-size: 0.85rem; color: #555; display: block; margin-bottom: 6px;">Seleccionar desde tu equipo:</label>
